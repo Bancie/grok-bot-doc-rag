@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doc-rag"
+version = "0.1.0"
+description = "Local CPU-only RAG CLI for PDF books and papers"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pymupdf==1.28.2",
+    "sentence-transformers==6.1.0",
+    "chromadb==1.5.9",
+    "rank-bm25==0.2.2",
+    "typer==0.27.2",
+    "numpy==2.2.6",
+    # Latest build on the PyTorch CPU index. 2.9.1+cpu satisfies ==2.9.1.
+    "torch==2.9.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+
+[project.scripts]
+doc-rag = "doc_rag.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore:builtin type Swig:DeprecationWarning",
+    "ignore:builtin type swigvarlink:DeprecationWarning",
+]

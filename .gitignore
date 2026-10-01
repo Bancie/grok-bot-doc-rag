@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# doc-rag local data, PDFs, and model caches
+*.pdf
+.doc-rag/
+models/
+.cache/
+huggingface/
