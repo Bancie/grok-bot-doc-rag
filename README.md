@@ -2,6 +2,14 @@
 
 Local, CPU-only retrieval over a PDF. An agent on another machine can clone this repo and call `doc-rag` to answer questions about a book or paper with page citations. The tool only reads a PDF path you already have. It does not call Linear or Google Drive. The only network use is the first download of an embedding model from Hugging Face.
 
+## Architecture
+
+![doc-rag high-level RAG architecture](docs/architecture.png)
+
+**Indexing** (`doc-rag index`) reads the PDF text and its table of contents, drops repeated headers and footers, and splits each TOC section into overlapping word chunks tagged with their pages and section path. Each chunk is embedded on the CPU and stored in that document's Chroma collection, and its tokens go into a BM25 sidecar file next to it under `DOC_RAG_HOME`. **Querying** (`doc-rag query`) embeds the question with the model's query prompt, ranks the chunks both by cosine similarity and by BM25 keyword score, and merges the two rankings with reciprocal rank fusion. The top-k chunks come back with their pages and section path, so the calling agent or LLM can write the answer and cite them. `doc-rag eval` runs the same query path and scores hit@k and MRR against expected pages.
+
+Editable source: [Excalidraw scene](https://app.excalidraw.com/s/7c7V2MAamg9/9380IeW4Lxt) (Excalidraw+ workspace, sign-in required).
+
 ## Install
 
 From a fresh Linux box, Python 3.10+:
